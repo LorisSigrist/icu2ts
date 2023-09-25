@@ -4,6 +4,6 @@ import { createBundle } from "dts-buddy";
 export default createBundle({
     output: "types/index.d.ts",
     modules: {
-        ".": "./src/index.js",
+        "icu2ts": "./src/index.js",
     },
 });
