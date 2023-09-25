@@ -1,10 +1,20 @@
 {
     "name": "icu2ts",
     "version": "1.0.1",
+    "description": "Generate TypeScript Types from ICU MessageFormat strings",
+    "keywords": ["ICU", "Typesafe", "TypeScript", "MessageFormat", "i18n", "localization", "internationalization", "translation", "formatjs"],
+
     "author": "Loris Sigrist",
     "type": "module",
     "types": "./types/index.d.ts",
     "main": "src/index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/LorisSigrist/icu2ts.git"
+    },
+    "homepage": "https://github.com/LorisSigrist/icu2ts#readme",
+    "license": "MIT",
+    
     "scripts": {
         "test": "vitest --run --passWithNoTests",
         "format": "prettier . --write",
