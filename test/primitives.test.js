@@ -33,11 +33,11 @@ describe("primitive types", () => {
 
     it("generates types for a message with multiple arguments", () => {
         const type = generateType(
-            "You have {numPhotos, number} in your {numAlbums, number} albums.",
+            "You have {numPhotos, number} in your {numAlbums, number} albums {name}",
         );
         expectNonWhitespaceToEqual(
             type,
-            "{numPhotos:number}&{numAlbums:number}",
+            "{numPhotos:number, numAlbums:number, name: string|number}",
         );
     });
 });

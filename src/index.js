@@ -20,28 +20,32 @@ export function generateType(message) {
 function generateTypeFromAST(elements) {
     const intersectionElements = [];
 
+    /** 
+     * The fields that need to be present, regardless of which branch is taken.
+     * @type {Map<string, string>}
+    */
+    const commonFields = new Map();
+
     for (const element of elements) {
         switch (element.type) {
             case TYPE.number: {
-                intersectionElements.push(`{ ${element.value}: number}`);
+                commonFields.set(element.value, "number");
                 break;
             }
 
             case TYPE.argument: {
-                intersectionElements.push(
-                    `{ ${element.value}: string | number }`,
-                );
+                commonFields.set(element.value, "string | number");
                 break;
             }
 
             case TYPE.date:
             case TYPE.time: {
-                intersectionElements.push(`{ ${element.value}: Date }`);
+                commonFields.set(element.value, "Date");
                 break;
             }
 
             case TYPE.tag: {
-                intersectionElements.push(`{ ${element.value}: string }`);
+                commonFields.set(element.value, "string");
 
                 //Make sure to also generate types for the children of the tag
                 const contentType = generateTypeFromAST(element.children);
@@ -53,8 +57,7 @@ function generateTypeFromAST(elements) {
             }
 
             case TYPE.plural: {
-                let str = "";
-                str += `{ ${element.value}: number }`;
+                commonFields.set(element.value, "number");
 
                 const branchTypes = [];
                 let emptyBranch = false;
@@ -68,13 +71,13 @@ function generateTypeFromAST(elements) {
                 }
 
                 if (branchTypes.length > 0) {
-                    str += " & ((";
+                    let str = "";
+                    str += "((";
                     str += branchTypes.join(") | (");
                     if (emptyBranch) str += ") | ({}";
                     str += "))";
+                    intersectionElements.push(str);
                 }
-
-                intersectionElements.push(str);
                 break;
             }
 
@@ -138,6 +141,19 @@ function generateTypeFromAST(elements) {
                 break;
             }
         }
+    }
+
+    if (commonFields.size) {
+        let str = "{";
+        for (const [key, value] of commonFields.entries()) {
+            str += `${key}: ${value},`;
+        }
+
+        //Remove trailing comma
+        if (str.endsWith(",")) str = str.slice(0, -1);
+        str += "}";
+
+        intersectionElements.push(str);
     }
 
     return intersectionElements.join(" & ");
