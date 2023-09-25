@@ -1,0 +1,31 @@
+{
+    "name": "icu2ts",
+    "version": "0.0.1",
+    "author": "Loris Sigrist",
+    "type": "module",
+    "types": "./types/index.d.ts",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "vitest --run --passWithNoTests",
+        "format": "prettier . --write",
+        "prepublishOnly": "node ./dts.js"
+    },
+    "dependencies": {
+        "@formatjs/icu-messageformat-parser": "^2.6.2"
+    },
+    "devDependencies": {
+        "dts-buddy": "^0.2.5",
+        "prettier": "3.0.3",
+        "vitest": "^0.34.5"
+    },
+    "files": [
+        "src",
+        "types"
+    ],
+    "exports": {
+        ".": {
+            "types": "./types/index.d.ts",
+            "import": "./src/index.js"
+        }
+    }
+}
