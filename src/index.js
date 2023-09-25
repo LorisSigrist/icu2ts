@@ -7,7 +7,7 @@ import { parse, TYPE } from "@formatjs/icu-messageformat-parser";
  * @returns {string}
  */
 export function generateType(message) {
-    const parsed = parse(message, { requiresOtherClause: false });
+    const parsed = parse(message, { requiresOtherClause: false, shouldParseSkeletons: true });
     const type = generateTypeFromAST(parsed);
     if (type.length === 0) return "{}";
     return type;

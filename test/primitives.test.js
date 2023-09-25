@@ -31,6 +31,11 @@ describe("primitive types", () => {
         expectNonWhitespaceToEqual(type, "{ name: string }");
     });
 
+    it("generates types for a number with a skeleton", () => {
+        const type = generateType("{progress, number, ::percent scale/100 .##} completed");
+        expectNonWhitespaceToEqual(type, "{progress:number}");
+    });
+
     it("generates types for a message with multiple arguments", () => {
         const type = generateType(
             "You have {numPhotos, number} in your {numAlbums, number} albums {name}",
