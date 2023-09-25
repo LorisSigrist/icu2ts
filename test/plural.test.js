@@ -23,7 +23,7 @@ describe("plural types", () => {
         );
         expectTypeDefinitionsToEqual(
             type,
-            "(({ object: string | number }) | ({ object: string | number })) & { numObjects:number }",
+            "(({ object: string  }) | ({ object: string  })) & { numObjects:number }",
         );
     });
 });

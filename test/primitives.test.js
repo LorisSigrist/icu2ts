@@ -28,7 +28,7 @@ describe("primitive types", () => {
 
     it("generates types for a message with an untyped argument", () => {
         const type = generateType("Welcome, {name}!");
-        expectNonWhitespaceToEqual(type, "{ name: string|number }");
+        expectNonWhitespaceToEqual(type, "{ name: string }");
     });
 
     it("generates types for a message with multiple arguments", () => {
@@ -37,7 +37,7 @@ describe("primitive types", () => {
         );
         expectNonWhitespaceToEqual(
             type,
-            "{numPhotos:number, numAlbums:number, name: string|number}",
+            "{numPhotos:number, numAlbums:number, name: string}",
         );
     });
 });

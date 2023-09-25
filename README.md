@@ -13,7 +13,7 @@ const message =
 
 const typeDefinition = generateType(message);
 
-// typeDefinition = { name: string } & { count: number };
+// typeDefinition = { name: string, count: number };
 ```
 
 The types may not be as compact as they could be, but they are correct.

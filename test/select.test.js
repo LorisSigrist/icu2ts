@@ -36,7 +36,7 @@ describe("select types", () => {
             "{powerLevel, select, 9000 {It's 9000! {someArg}} other {Its {someArg}!}}",
         );
         const expected =
-            '{powerLevel: "9000" | (string & {})} & (({someArg: string|number}) | ({someArg: string|number}))';
+            '{powerLevel: "9000" | (string & {})} & (({someArg: string}) | ({someArg: string}))';
         expectNonWhitespaceToEqual(type, expected);
     });
 
@@ -45,7 +45,7 @@ describe("select types", () => {
             "{powerLevel, select, 9000 {It's 9000!} other {Its {someArg}!}}",
         );
         const expected =
-            '{powerLevel: "9000" | (string & {})} & (({someArg: string|number}) | ({}))';
+            '{powerLevel: "9000" | (string & {})} & (({someArg: string}) | ({}))';
         expectNonWhitespaceToEqual(type, expected);
     });
 });

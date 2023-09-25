@@ -22,6 +22,9 @@ function generateTypeFromAST(elements) {
 
     /** 
      * The fields that need to be present, regardless of which branch is taken.
+     * 
+     * This is a convenience to make the generated types more readable. Adding each field to the intersection
+     * as `{ fieldName: fieldType }` would work, but make the types more verbose.
      * @type {Map<string, string>}
     */
     const commonFields = new Map();
@@ -34,7 +37,7 @@ function generateTypeFromAST(elements) {
             }
 
             case TYPE.argument: {
-                commonFields.set(element.value, "string | number");
+                commonFields.set(element.value, "string");
                 break;
             }
 

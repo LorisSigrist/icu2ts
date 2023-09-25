@@ -12,7 +12,7 @@ describe("tag types", () => {
         const type = generateType("<tag>{someArg}</tag>");
         expectTypeDefinitionsToEqual(
             type,
-            "({ someArg: string | number }) & { tag: string }",
+            "({ someArg: string }) & { tag: string }",
         );
     });
 });
