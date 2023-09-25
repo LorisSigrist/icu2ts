@@ -1,0 +1,37 @@
+import { compile } from "../../src/compile.js";
+import { describe, it, expect } from "vitest";
+import { formatJS } from "./utils.js";
+
+describe("compile", () => {
+    it("compiles a message with no arguments", () => {
+        const message = "Hello world";
+        const compiled = compile(message, "en");
+        const result = eval(`(${compiled})()`);
+
+        const correct = formatJS(message);
+        expect(result).toMatch(correct);
+    });
+
+    it("compiles a message with a string argument into a function", () => {
+        const message = "Hello {name}";
+        const compiled = compile(message, "en");
+        const values = { name: "world" };
+        const result = eval(`(${compiled})({ name: "world" })`);
+
+        const correct = formatJS(message, values);
+        expect(result).toMatch(correct);
+    });
+
+    it("compiles a message with a tag argument into a function", () => {
+        const message = "Hello <tag>{name}!</tag>";
+        const compiled = compile(message, "en");
+        const values = {
+            tag: (value) => `<bold>${value}</bold>`,
+            name: "world",
+        };
+        const result = eval(`(${compiled})({ tag: "bold", name: "world" })`);
+
+        const correct = formatJS(message, values);
+        expect(result).toMatch(correct);
+    });
+});
