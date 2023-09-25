@@ -1,6 +1,6 @@
 {
     "name": "icu2ts",
-    "version": "0.0.1",
+    "version": "1.0.1",
     "author": "Loris Sigrist",
     "type": "module",
     "types": "./types/index.d.ts",

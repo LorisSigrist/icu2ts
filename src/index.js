@@ -159,5 +159,8 @@ function generateTypeFromAST(elements) {
         intersectionElements.push(str);
     }
 
-    return intersectionElements.join(" & ");
+    if (intersectionElements.length === 0) return "";
+    if (intersectionElements.length === 1) return intersectionElements[0];
+    
+    return "(" + intersectionElements.join(") & (") + ")";
 }

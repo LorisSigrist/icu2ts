@@ -13,6 +13,13 @@ describe("select types", () => {
         expectNonWhitespaceToEqual(type, expected);
     });
 
+    it("adds the correct parentheses for a select message with another argument", () => {
+        const msg = "Guten tag, {gender, select, male {Herr} female {Frau}} {name}!";
+        const type = generateType(msg);
+        const expected = '({gender : "male" } | {gender: "female"}) & ({name: string})';
+        expectNonWhitespaceToEqual(type, expected);
+    });
+
     it("generates types for nested select messages with no other branch", () => {
         let type = generateType(
             "{option1, select, a {A} b {B {option2, select, c {C} d {D}}}}",
