@@ -70,7 +70,7 @@ function compileElement(element, locale, poundValue) {
                     "Pound sign used outside of plural/select element",
                 );
             }
-            return "${" + poundValue + "}";
+            return "${new Intl.NumberFormat(\""+ locale +"\").format(" + poundValue + ")}";
         }
         case TYPE.plural: {
             return compilePlural(element, locale, poundValue);
@@ -161,6 +161,8 @@ function compilePlural(element, locale, poundValue) {
     /** @type {Record<Intl.LDMLPluralRule | string, string>} */
     const pluralValues = {};
 
+    let fallback = '""';
+
     for (const [key, option] of Object.entries(element.options)) {
         if (key.startsWith("=")) {
             const number = parseInt(key.slice(1));
@@ -170,7 +172,15 @@ function compilePlural(element, locale, poundValue) {
                     .map((el) => compileElement(el, locale, element.value))
                     .join("") +
                 "`";
-        } else {
+        } else if (key === "other") {
+            fallback =
+                "`" +
+                option.value
+                    .map((el) => compileElement(el, locale, element.value))
+                    .join("") +
+                "`";
+        }
+        else {
             pluralValues[key] =
                 "`" +
                 option.value
@@ -187,10 +197,10 @@ function compilePlural(element, locale, poundValue) {
     }
 
     for (const [pluralRule, option] of Object.entries(pluralValues)) {
-        str += `new Intl.PluralRules("${locale}").select(${element.value}) === "${pluralRule}" ? ${option} : `;
+        str += `new Intl.PluralRules("${locale}", {type: "${element.pluralType}"}).select(${element.value}) === "${pluralRule}" ? ${option} : `;
     }
 
-    str += '""}';
+    str += `${fallback} }`;
     return str;
 }
 
