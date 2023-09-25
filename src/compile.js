@@ -1,7 +1,8 @@
 import { TYPE, parse } from "@formatjs/icu-messageformat-parser";
 
 /**
- * Compiles a message into a plain string, or a function that returns a string
+ * Compiles a message into a function that can be used to format the message
+ * 
  * @param {string} message
  * @param {string} locale
  * @return {string} String literal or function that returns a string

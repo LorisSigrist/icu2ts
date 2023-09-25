@@ -9,7 +9,7 @@ export function formatJS(message, values = {}, locale = "en", key = "app.greetin
     const intl = createIntl({ locale });
     const messages = defineMessage({
         greeting: {
-            id: "key." + key,
+            id: key,
             defaultMessage: message,
             description: 'Greeting to welcome the user to the app',
         },
