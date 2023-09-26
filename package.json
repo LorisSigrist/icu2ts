@@ -1,6 +1,6 @@
 {
     "name": "icu2ts",
-    "version": "1.0.1",
+    "version": "1.1.1",
     "description": "Generate TypeScript Types from ICU MessageFormat strings",
     "keywords": [
         "ICU",
