@@ -2,7 +2,7 @@ import { TYPE, parse } from "@formatjs/icu-messageformat-parser";
 
 /**
  * Compiles a message into a function that can be used to format the message
- * 
+ *
  * @param {string} message
  * @param {string} locale
  * @return {string} String literal or function that returns a string
@@ -71,7 +71,13 @@ function compileElement(element, locale, poundValue) {
                     "Pound sign used outside of plural/select element",
                 );
             }
-            return "${new Intl.NumberFormat(\""+ locale +"\").format(" + poundValue + ")}";
+            return (
+                '${new Intl.NumberFormat("' +
+                locale +
+                '").format(' +
+                poundValue +
+                ")}"
+            );
         }
         case TYPE.plural: {
             return compilePlural(element, locale, poundValue);
@@ -92,7 +98,38 @@ function compileElement(element, locale, poundValue) {
                 `).format(${element.value})}`
             );
         }
+        case TYPE.number: {
+            return compileNumber(element, locale);
+        }
     }
+}
+
+/**
+ *
+ * @param {import("@formatjs/icu-messageformat-parser").NumberElement} element
+ * @param {string} locale
+ */
+function compileNumber(element, locale) {
+    if (!element.style) {
+        return (
+            "${" +
+            `new Intl.NumberFormat("${locale}").format(${element.value})}`
+        );
+    }
+
+    if (typeof element.style === "string") {
+        return (
+            "${" +
+            `new Intl.NumberFormat("${locale}", {style:"${element.style}"}).format(${element.value})}`
+        );
+    }
+
+    const options = JSON.stringify(element.style.parsedOptions);
+    
+    return (
+        "${" +
+        `new Intl.NumberFormat("${locale}", ${options}).format(${element.value})}`
+    );
 }
 
 /**
@@ -146,7 +183,6 @@ function compileSelect(element, locale, poundValue) {
  * @returns {string}
  */
 function compilePlural(element, locale, poundValue) {
-
     /** @type {Record<number, string>} */
     const exactValues = {};
 
@@ -171,8 +207,7 @@ function compilePlural(element, locale, poundValue) {
                     .map((el) => compileElement(el, locale, element.value))
                     .join("") +
                 "`";
-        }
-        else {
+        } else {
             pluralValues[key] =
                 "`" +
                 option.value
@@ -254,7 +289,7 @@ function hasOnlyLiterals(elements) {
 
 /**
  * Escape a string literal so that it can be used inside a template literal
- * @param {string} literal 
+ * @param {string} literal
  * @returns {string}
  */
 function escapeLiteral(literal) {
