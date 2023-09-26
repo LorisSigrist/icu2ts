@@ -91,12 +91,7 @@ function compileElement(element, locale, poundValue) {
             );
         }
         case TYPE.date: {
-            return (
-                "${" +
-                `new Intl.DateTimeFormat("${locale}",` +
-                `{dateStyle: "${element.style}"}` +
-                `).format(${element.value})}`
-            );
+            return compileDate(element, locale);
         }
         case TYPE.number: {
             return compileNumber(element, locale);
@@ -129,6 +124,34 @@ function compileNumber(element, locale) {
     return (
         "${" +
         `new Intl.NumberFormat("${locale}", ${options}).format(${element.value})}`
+    );
+}
+
+/**
+ *
+ * @param {import("@formatjs/icu-messageformat-parser").DateElement} element
+ * @param {string} locale
+ */
+function compileDate(element, locale) {
+    if(!element.style) {
+        return (
+            "${" +
+            `new Intl.DateTimeFormat("${locale}").format(${element.value})}`
+        );
+    }
+
+    if (typeof element.style === "string") {
+        return (
+            "${" +
+            `new Intl.DateTimeFormat("${locale}", {dateStyle:"${element.style}"}).format(${element.value})}`
+        );
+    }
+
+    const options = JSON.stringify(element.style.parsedOptions);
+
+    return (
+        "${" +
+        `new Intl.DateTimeFormat("${locale}", ${options}).format(${element.value})}`
     );
 }
 
@@ -293,5 +316,6 @@ function hasOnlyLiterals(elements) {
  * @returns {string}
  */
 function escapeLiteral(literal) {
-    return literal.replace(/`/g, "\\`");
+    literal = literal.replace(/`/g, "\\`");
+    return literal;
 }
