@@ -34,4 +34,15 @@ describe("compile", () => {
         const correct = formatJS(message, values);
         expect(result).toMatch(correct);
     });
+
+    it("compiles a message containing a backtick", () => {
+        const message = "Hello `world` {name}";
+        const compiled = compile(message, "en");
+        const result = eval(`(${compiled})({name: "nick"})`);
+
+        console.log(result);
+
+        const correct = formatJS(message, {name: "nick"});
+        expect(result).toMatch(correct);
+    });
 });

@@ -47,7 +47,7 @@ function compileAST(elements, locale) {
 function compileElement(element, locale, poundValue) {
     switch (element.type) {
         case TYPE.literal:
-            return element.value;
+            return escapeLiteral(element.value);
         case TYPE.argument:
             return "${" + element.value + "}";
         case TYPE.tag:
@@ -146,15 +146,6 @@ function compileSelect(element, locale, poundValue) {
  * @returns {string}
  */
 function compilePlural(element, locale, poundValue) {
-    /*
-    zero: This category is used for languages that have grammar specialized specifically for zero number of items. (Examples are Arabic and Latvian.)
-    one: This category is used for languages that have grammar specialized specifically for one item. Many languages, but not all, use this plural category. (Many popular Asian languages, such as Chinese and Japanese, do not use this category.)
-    two: This category is used for languages that have grammar specialized specifically for two items. (Examples are Arabic and Welsh.)
-    few: This category is used for languages that have grammar specialized specifically for a small number of items. For some languages this is used for 2-4 items, for some 3-10 items, and other languages have even more complex rules.
-    many: This category is used for languages that have grammar specialized specifically for a larger number of items. (Examples are Arabic, Polish, and Russian.)
-    other: This category is used if the value doesn't match one of the other plural categories. Note that this is used for "plural" for languages (such as English) that have a simple "singular" versus "plural" dichotomy.
-    =value: This is used to match a specific value regardless of the plural categories of the current locale.
-    */
 
     /** @type {Record<number, string>} */
     const exactValues = {};
@@ -259,4 +250,13 @@ function hasOnlyLiterals(elements) {
         hasOnlyLiterals &&= element.type === TYPE.literal;
     }
     return hasOnlyLiterals;
+}
+
+/**
+ * Escape a string literal so that it can be used inside a template literal
+ * @param {string} literal 
+ * @returns {string}
+ */
+function escapeLiteral(literal) {
+    return literal.replace(/`/g, "\\`");
 }
