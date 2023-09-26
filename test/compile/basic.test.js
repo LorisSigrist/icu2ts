@@ -40,8 +40,6 @@ describe("compile", () => {
         const compiled = compile(message, "en");
         const result = eval(`(${compiled})({name: "nick"})`);
 
-        console.log(result);
-
         const correct = formatJS(message, {name: "nick"});
         expect(result).toMatch(correct);
     });
