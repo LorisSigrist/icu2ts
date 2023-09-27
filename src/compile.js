@@ -247,7 +247,7 @@ function compilePlural(element, locale, poundValue) {
     }
 
     for (const [pluralRule, option] of Object.entries(pluralValues)) {
-        str += `new Intl.PluralRules("${locale}", {type: "${element.pluralType}"}).select(${element.value}) === "${pluralRule}" ? ${option} : `;
+        str += `new Intl.PluralRules("${locale}", {type: "${element.pluralType}"}).select(${element.value}) == "${pluralRule}" ? ${option} : `;
     }
 
     str += `${fallback} }`;
